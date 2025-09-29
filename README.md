@@ -1,1 +1,1 @@
-# ethereal-blooms-frontend
+# Ethereal Blooms Frontend
