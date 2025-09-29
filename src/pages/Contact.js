@@ -1,6 +1,10 @@
-// /client/src/pages/Contact.js
 import React, { useState, useRef } from 'react';
 import { Container, Form, Button, Alert, Spinner } from 'react-bootstrap';
+
+// This is the main character move:
+const API_URL = process.env.NODE_ENV === 'production'
+    ? 'https://ethereal-blooms-backend.onrender.com' // Your live backend URL
+    : 'http://localhost:8080'; // Your local backend URL
 
 const Contact = () => {
   const form = useRef();
@@ -11,7 +15,6 @@ const Contact = () => {
     setStatus('sending');
 
     const formData = new FormData(form.current);
-    // Create a plain JavaScript object from the form data
     const data = {
       fromName: formData.get('from_name'),
       fromEmail: formData.get('from_email'),
@@ -20,8 +23,7 @@ const Contact = () => {
     };
 
     try {
-      // Send the data to your Spring Boot backend's endpoint
-      const response = await fetch('http://localhost:8080/api/send-email', {
+      const response = await fetch(`${API_URL}/api/send-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -31,13 +33,11 @@ const Contact = () => {
 
       if (response.ok) {
         setStatus('success');
-        form.current.reset(); // Clear the form on success
+        form.current.reset();
       } else {
-        // If the server responds with an error (like 400 or 500)
         setStatus('error');
       }
     } catch (error) {
-      // If the request fails entirely (e.g., network error, server is down)
       console.error('Error sending email:', error);
       setStatus('error');
     }
@@ -100,3 +100,4 @@ const Contact = () => {
 };
 
 export default Contact;
+
