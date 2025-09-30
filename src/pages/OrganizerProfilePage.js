@@ -3,9 +3,21 @@ import { Container, Row, Col, Card, Spinner, Button } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
 import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import { FaStar } from 'react-icons/fa';
+
+// Star Rating Component - it's giving ✨ aesthetic ✨
+const StarRating = ({ rating }) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+        stars.push(
+            <FaStar key={i} color={i < rating ? "#ffc107" : "#e4e5e9"} size={20} />
+        );
+    }
+    return <div className="mb-3">{stars}</div>;
+};
 
 const OrganizerProfilePage = () => {
-    const { id } = useParams(); // Gets the decorator's ID from the URL
+    const { id } = useParams();
     const [organizer, setOrganizer] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -53,24 +65,26 @@ const OrganizerProfilePage = () => {
         <Container className="my-5">
             <Row className="justify-content-center">
                 <Col md={8}>
-                    <Card className="glass-card">
-                        <Row>
-                            <Col md={4}>
-                                <Card.Img 
-                                    src={organizer.imageUrl || 'https://placehold.co/400x400/f8c8dc/444?text=No+Image'} 
-                                    className="rounded-circle"
-                                />
-                            </Col>
-                            <Col md={8}>
-                                <Card.Body>
-                                    <Card.Title as="h1">{organizer.name}</Card.Title>
-                                    <Card.Subtitle className="mb-3 text-muted">{organizer.location}</Card.Subtitle>
-                                    <Card.Text><strong>Price Range:</strong> {organizer.priceRange}</Card.Text>
-                                    <Card.Text>{organizer.bio}</Card.Text>
-                                    <Button href={`mailto:${organizer.userEmail}`} className="btn-custom">Contact Organizer</Button>
-                                </Card.Body>
-                            </Col>
-                        </Row>
+                    <Card className="glass-card text-center">
+                        <Card.Img 
+                            src={organizer.imageUrl || 'https://placehold.co/400x400/f8c8dc/444?text=No+Image'} 
+                            className="rounded-circle mx-auto mt-3"
+                            style={{ width: '150px', height: '150px', objectFit: 'cover' }}
+                        />
+                        <Card.Body>
+                            <Card.Title as="h1">{organizer.name}</Card.Title>
+                            <Card.Subtitle className="mb-3 text-muted">{organizer.location}</Card.Subtitle>
+                            <StarRating rating={organizer.rating} />
+                            
+                            <Card.Text className="text-start"><strong>About Me:</strong> {organizer.bio}</Card.Text>
+                            <Card.Text className="text-start"><strong>Packages:</strong> {organizer.packages}</Card.Text>
+                            <Card.Text className="text-start"><strong>Price Range:</strong> {organizer.priceRange}</Card.Text>
+                            
+                            <hr />
+                            
+                            <Button href={`mailto:${organizer.userEmail}`} className="btn-custom m-2">Email Me</Button>
+                            <Button href={`tel:${organizer.phoneNumber}`} className="btn-custom m-2">Call Me</Button>
+                        </Card.Body>
                     </Card>
                 </Col>
             </Row>
