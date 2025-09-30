@@ -17,7 +17,7 @@ const StarRating = ({ rating }) => {
 };
 
 const OrganizerProfilePage = () => {
-    const { id } = useParams();
+    const { id } = useParams(); // Gets the decorator's ID from the URL
     const [organizer, setOrganizer] = useState(null);
     const [loading, setLoading] = useState(true);
 
